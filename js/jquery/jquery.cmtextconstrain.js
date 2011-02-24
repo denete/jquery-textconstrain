@@ -1,9 +1,9 @@
 /**
  * Plugin: jQuery Text-constrain, jquery.cmtextconstrain.js
  * Copyright: Copyright (c) 2011 CMGdigital
- * Version: xxx
+ * Version: 1.0.0
  * Author: David A. Enete
- * Date: xxx
+ * Date: 24 February 2011
  * Description: jQuery Text-constrain plugin - A jQuery plugin to allow text elements on a page to be constrained by size.
  */
 
@@ -31,19 +31,19 @@
                     // create constrained string
                     if(opts.restrict['type'] == 'words'){
                         var wordArr = $elemClone.text().split(/\s+/);
-                        if(wordArr.length <= opts.restrict['val']){
+                        if(wordArr.length <= opts.restrict['limit']){
                             $this.cmtextconstrain('destroy');
                             return;
                         } else {
-                            var shortString = wordArr.slice(0,opts.restrict['val']).join(' ');
+                            var shortString = wordArr.slice(0,opts.restrict['limit']).join(' ');
                         }
                     } else if(opts.restrict['type'] == 'chars'){
-                        if($this.text().length <= opts.restrict['val']){
+                        if($this.text().length <= opts.restrict['limit']){
                             $this.cmtextconstrain('destroy');
                             return;
                         } else {
-                            var charPointer = opts.restrict['val'];
-                            var shortString = $this.text().substr(0,opts.restrict['val']);
+                            var charPointer = opts.restrict['limit'];
+                            var shortString = $this.text().substr(0,opts.restrict['limit']);
                             var nextChar = '';
                             while(nextChar != ' '){
                                 shortString += nextChar;
@@ -60,9 +60,11 @@
                     // need to implement delay if event is hover / mouseover
                     $elemClone.find('.cmExpose').bind(opts.event, function(){
                         _expose($this,$elemClone);
+                        opts.onExpose.call(this);
                     });
                     $this.find('.cmConstrain').bind(opts.event, function(){
                         _expose($elemClone,$this);
+                        opts.onConstrain.call(this);
                     });
                 }
             });
@@ -101,7 +103,7 @@
         event: 'click',
         onExpose: function(){},
         onConstrain: function(){},
-        restrict: {type: 'chars', val: 121}, // ['chars', 'words']
+        restrict: {type: 'chars', limit: 121}, // ['chars', 'words']
         showControl: {string: '[&nbsp;+&nbsp;]', title: 'Show More', addclass: 'cmShowHide'},
         hideControl: {string: '[&nbsp;-&nbsp;]', title: 'Show Less', addclass: 'cmShowHide'},
         trailingString: '...'
