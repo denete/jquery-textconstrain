@@ -61,13 +61,11 @@ cmg.query('#cmImage').cmlocksize('destroy'); <span class="note">// destroy the i
         
 
         <div id="main">
-            <!--<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce nulla justo, condimentum dapibus vulputate ac, feugiat in magna. Morbi congue, lectus eu tincidunt gravida, velit sem rutrum dolor, id convallis mauris dui vitae orci. Integer ornare commodo vulputate. Vivamus eget dignissim arcu. Sed non odio ac massa faucibus malesuada. Donec orci ante, ullamcorper sed consequat sit amet, malesuada vitae orci. Proin ut sapien at quam tristique malesuada vitae quis nisl. Cras et nunc sapien, commodo imperdiet erat. Sed non quam quis massa ultricies faucibus sed nec tellus. Nullam pellentesque sodales egestas. Aenean accumsan volutpat lectus, eget tincidunt diam pellentesque a. Donec lacinia eleifend nibh non tempus.</p>-->
+            <p id="cmLipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce nulla justo, condimentum dapibus vulputate ac, feugiat in magna. Morbi congue, lectus eu tincidunt gravida, velit sem rutrum dolor, id convallis mauris dui vitae orci. Integer ornare commodo vulputate. Vivamus eget dignissim arcu. Sed non odio ac massa faucibus malesuada. Donec orci ante, ullamcorper sed consequat sit amet, malesuada vitae orci. Proin ut sapien at quam tristique malesuada vitae quis nisl. Cras et nunc sapien, commodo imperdiet erat. Sed non quam quis massa ultricies faucibus sed nec tellus. Nullam pellentesque sodales egestas. Aenean accumsan volutpat lectus, eget tincidunt diam pellentesque a. Donec lacinia eleifend nibh non tempus.</p>
 
             <h2 id="cmTextHeaderElement" class="cmTextConstrain">This is a Constrained Header Element</h2>
 
             <p id="cmTextElement" class="cmTextConstrain">Random-hyphen! This is the text to which we will be applying the constraint. It is a paragraph element. Sed non quam quis massa ultricies faucibus sed nec tellus. Nullam pellentesque sodales egestas. Aenean accumsan volutpat lectus, eget tincidunt diam pellentesque a. Donec lacinia eleifend nibh non tempus.</p>
-
-            <!--<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce nulla justo, condimentum dapibus vulputate ac, feugiat in magna. Morbi congue, lectus eu tincidunt gravida, velit sem rutrum dolor, id convallis mauris dui vitae orci. Integer ornare commodo vulputate. Vivamus eget dignissim arcu. Sed non odio ac massa faucibus malesuada. Donec orci ante, ullamcorper sed consequat sit amet, malesuada vitae orci. Proin ut sapien at quam tristique malesuada vitae quis nisl. Cras et nunc sapien, commodo imperdiet erat. Sed non quam quis massa ultricies faucibus sed nec tellus. Nullam pellentesque sodales egestas. Aenean accumsan volutpat lectus, eget tincidunt diam pellentesque a. Donec lacinia eleifend nibh non tempus.</p>-->
         </div>
 
 
@@ -81,25 +79,18 @@ cmg.query('#cmImage').cmlocksize('destroy'); <span class="note">// destroy the i
 <script src="js/jquery/jquery.cmtextconstrain.js" type="text/javascript"></script>
 <script type="text/javascript">
 cmg.query(document).ready(function(){
-     cmg.query('p.cmTextConstrain').cmtextconstrain({
-        animSpeed: 250,
-        delay: 100,
-        event: 'click', // 'hover'
-        onExpose: function(){},
-        onConstrain: function(){},
-        fade: true,
-        //restrict: {words: 0, chars: 50, height: 0, width: 0},
-        showControl: {string: '[&nbsp;+&nbsp;]', title: 'Show More', class: 'cmShowHide'},
-        hideControl: {string: '[&nbsp;-&nbsp;]', title: 'Show Less', class: 'cmShowHide'},
+    cmg.query('.cmTextConstrain').cmtextconstrain({
+        restrict: {type: 'words', val: 6},
+        showControl: {string: '[&nbsp;+&nbsp;]', title: 'Show More', addclass: 'cmShowHide'},
+        hideControl: {string: '[&nbsp;-&nbsp;]', title: 'Show Less', addclass: 'cmShowHide'},
         trailingString: '...'
-        });
-        cmg.query('#cmTextHeaderElement').cmtextconstrain({
-           restrict: {words: 0, chars: 10, height: 0, width: 0},
-           showControl: {string: '[&nbsp;+&nbsp;]', title: 'Show More', class: 'cmShowHide'},
-           hideControl: {string: '[&nbsp;-&nbsp;]', title: 'Show Less', class: 'cmShowHide'},
-           trailingString: '...'
-           });
-
+    });
+    cmg.query('#cmLipsum').cmtextconstrain({
+        restrict: {type: 'chars', val: 6},
+        showControl: {string: '[&nbsp;+&nbsp;]', title: 'Show More', addclass: 'cmShowHide'},
+        hideControl: {string: '[&nbsp;-&nbsp;]', title: 'Show Less', addclass: 'cmShowHide'},
+        trailingString: '...'
+    });
 });
 </script>
 
