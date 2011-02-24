@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>CMTextConstrain</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <style type="text/css">html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, a, abbr, acronym, address, big, cite, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center,fieldset, dl, dt, dd, ol, ul, li, form, label, caption {margin: 0;padding: 0;border: 0;outline:0;font-family:Arial,Helvetica,sans-serif;text-align:left;color:#000;white-space:normal}
+        input, textarea, select {font-family:Arial,Helvetica,Sans-serif}
+        body {line-height: 1.2em;color:#999;font-size:10pt}
+        ol, ul {list-style: none}
+        .cmFloatLeft{float:left}
+        .cmFloatRight{float:right}
+        #main{margin:1em;width:500px}
+        .hidden{display:none;}
+        .cmConstrainContainer{background-color:#f00}
+        .explanation{margin:1em;padding-bottom:1em;border-bottom:1px solid #000}
+        .explanation a{color:#33f}
+        .explanation ul{padding-top:.5em}
+        .explanation ul li{padding-bottom:.5em}
+        pre{border:1px dashed #333;color:#000;background-color:#eee;margin:.5em 2em;padding:.5em}
+        p{margin:.5em 0}
+        span.note{color:#666}
+        h1{margin:.5em}
+        </style>
+    </head>
+    <body>
+        <h1>cmtextconstrain plugin for jQuery</h1>
+        <div class="explanation">
+            <p>When using cmlocksize on this example page, a border is shown to illustrate the locking and then animating sizes as well as the presence and removal of the size locking wrapper.</p>
+            <p>&#42; cmlocksize requires jQuery 1.4.</p>
+            <h4>Use:</h4>
+            <!--
+            <pre><code>cmg.query('#cmImage').cmlocksize({
+                animSpeed: 250, <span class="note">// speed of fade and resize animations in milliseconds</span>
+                delay: 100, <span class="note">// delay before resizing in milliseconds</span>
+                onLock: function(){ <span class="note">// a function to be run once the element size is locked</span>
+                        cmg.query(this).attr('src','img/' + images[pointer]);
+                    },
+                onUnlock: function(){ <span class="note">// a function to be run once the resizing has finished</span>
+                    //nothing
+                    },
+                fade: true, <span class="note">// fade the element out / in and animate the resize * true is recommended for current code *</span>
+                autoUnlock: true <span class="note">// if set to false, you can call the unlock method when you want to</span>
+                });</code></pre>
+                -->
+                <h4>Methods:</h4>
+                <!--
+                <pre><code>cmg.query('#cmImage').cmlocksize('lockOn'); <span class="note">// instantiate the lock</span>
+cmg.query('#cmImage').cmlocksize('lockOff'); <span class="note">// programmatically release the lock</span>
+cmg.query('#cmImage').cmlocksize('destroy'); <span class="note">// destroy the instance of cmlocksize</span></code></pre>
+            -->
+            <!--
+            <ul>
+                <li>Click <a href="javascript:void(0);" class="cmImageChange">here</a> (or on the image itself) to see the effect. Repeated clicks will continue to demonstrate the behavior.</li>
+                <li><a href="javascript:void(0);" id="destroy">Destroy instance of cmlocksize</a></li>
+                <li><a href="js/jquery/jquery.cmlocksize.js" target="_blank">View jquery.cmlocksize.js</a></li>
+            </ul>
+            -->
+        </div>
+        
+
+        <div id="main">
+            <!--<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce nulla justo, condimentum dapibus vulputate ac, feugiat in magna. Morbi congue, lectus eu tincidunt gravida, velit sem rutrum dolor, id convallis mauris dui vitae orci. Integer ornare commodo vulputate. Vivamus eget dignissim arcu. Sed non odio ac massa faucibus malesuada. Donec orci ante, ullamcorper sed consequat sit amet, malesuada vitae orci. Proin ut sapien at quam tristique malesuada vitae quis nisl. Cras et nunc sapien, commodo imperdiet erat. Sed non quam quis massa ultricies faucibus sed nec tellus. Nullam pellentesque sodales egestas. Aenean accumsan volutpat lectus, eget tincidunt diam pellentesque a. Donec lacinia eleifend nibh non tempus.</p>-->
+
+            <h2 id="cmTextHeaderElement" class="cmTextConstrain">This is a Constrained Header Element</h2>
+
+            <p id="cmTextElement" class="cmTextConstrain">Random-hyphen! This is the text to which we will be applying the constraint. It is a paragraph element. Sed non quam quis massa ultricies faucibus sed nec tellus. Nullam pellentesque sodales egestas. Aenean accumsan volutpat lectus, eget tincidunt diam pellentesque a. Donec lacinia eleifend nibh non tempus.</p>
+
+            <!--<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce nulla justo, condimentum dapibus vulputate ac, feugiat in magna. Morbi congue, lectus eu tincidunt gravida, velit sem rutrum dolor, id convallis mauris dui vitae orci. Integer ornare commodo vulputate. Vivamus eget dignissim arcu. Sed non odio ac massa faucibus malesuada. Donec orci ante, ullamcorper sed consequat sit amet, malesuada vitae orci. Proin ut sapien at quam tristique malesuada vitae quis nisl. Cras et nunc sapien, commodo imperdiet erat. Sed non quam quis massa ultricies faucibus sed nec tellus. Nullam pellentesque sodales egestas. Aenean accumsan volutpat lectus, eget tincidunt diam pellentesque a. Donec lacinia eleifend nibh non tempus.</p>-->
+        </div>
+
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"></script>
+<script type="text/javascript">
+    /* <![CDATA[ */
+    var cmg = {};
+    cmg.query = jQuery.noConflict(true);
+    /* ]]> */
+</script>
+<script src="js/jquery/jquery.cmtextconstrain.js" type="text/javascript"></script>
+<script type="text/javascript">
+cmg.query(document).ready(function(){
+     cmg.query('p.cmTextConstrain').cmtextconstrain({
+        animSpeed: 250,
+        delay: 100,
+        event: 'click', // 'hover'
+        control: 'text', // '' equals image
+        onExpose: function(){},
+        onConstrain: function(){},
+        fade: true,
+        //restrict: {words: 0, chars: 50, height: 0, width: 0},
+        trailingString: '...'
+        });
+});
+</script>
+
+
+
+</body>
+</html>
