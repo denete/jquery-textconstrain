@@ -25,9 +25,9 @@
                     $this.wrap('<div class="cmConstrainContainer" style="overflow:hidden;"></div>');
 
                     // clone and append
+                    // need sanity check for id
                     var cloneID = $this.attr('id') + '_clone';
                     $this.clone().prependTo($this.parents('.cmConstrainContainer')).attr({id: cloneID});
-                    //$this.hide();
                     var $elemClone = $('#' + cloneID);
                     
                    // _resizeParent($elemClone);
@@ -43,6 +43,8 @@
                     });
                     $elemClone.css({padding:0,margin:0});
                     $this.css({padding:0,margin:0});
+                    //$this.data({cloneW: $elemClone.width(),cloneH: $elemClone.height(),fullW: $this.width(),fullH: $this.height(), current: cloneID});
+                    //$this.hide();
                 }
                // _constrain($this);
                 _constrain($elemClone);
@@ -74,7 +76,8 @@
     function _resizeParent($elem){
         //console.log('$this.outerWidth(): ' + $elem.outerWidth());
         console.log('resizeParent');
-        $elem.parents('.cmConstrainContainer').css({width: $elem.outerWidth(),height: $elem.outerHeight()});
+        //$elem.parents('.cmConstrainContainer').css({width: $elem.outerWidth(),height: $elem.outerHeight()});
+        $elem.parents('.cmConstrainContainer').css({height: $elem.outerHeight()});
     }
     
     function _constrain($elem){
@@ -98,6 +101,7 @@
             $elem.text(tempString + opts.trailingString);
             $elem.append('<a href="javascript:void(0);" class="cmExpose">Expose</a>');
             $this.append('<a href="javascript:void(0);" class="cmConstrain">Constrain</a>');
+            $this.data({cloneW: $elem.width(),cloneH: $elem.height(),fullW: $this.width(),fullH: $this.height(), current: $elem.attr('id')});
             $elem.find('.cmExpose').click(function(){
                 _expose($this,$elem);
             });
@@ -109,17 +113,37 @@
     }
     
     function _expose($elemIn,$elemOut){
+        $elemOut.hide();
+        $elemIn.show();
+        
+        console.log('current: ' + $this.data('current'));
+        //console.log('fullW: ' + $this.data('fullW') + ', fullH: ' + $this.data('fullH'));
+        //console.log('cloneW: ' + $this.data('cloneW') + ', cloneH: ' + $this.data('cloneH'));
+        console.log('cmConstrainContainer height:' + $this.parents('.cmConstrainContainer').height());
+        if($this.data('current').indexOf('_clone')){
+            //$this.parents('.cmConstrainContainer').css({width:$this.data('fullW'),height:$this.data('fullH')});
+            $this.parents('.cmConstrainContainer').width($this.data('fullW')).height($this.data('fullH'));
+            $this.data({current: $elemIn.attr('id')});
+        } else {
+            //$this.parents('.cmConstrainContainer').css({width:$this.data('cloneW'),height:$this.data('cloneH')}).hide();
+            $this.parents('.cmConstrainContainer').width($this.data('cloneW')).height($this.data('cloneH'));
+            //var newWidth = $this.data('cloneW');
+            //var newHeight = $this.data('cloneH');
+            $this.data({current: $elemIn.attr('id')});
+        }
+        //console.log('data: ' + $this.data('current'));
         //console.log('$elemOut id: ' + $elemOut.attr('id') + ', $elemIn id: ' + $elemIn.attr('id'));
-        var newWidth = $elemIn.width();
+        /*var newWidth = $elemIn.width();
         var newHeight = $elemIn.height();
         var oldWidth = $elemOut.width();
-        var oldHeight = $elemOut.height();
-        console.log('oldHeight: ' + oldHeight + ', oldWidth: ' + oldWidth);
-        console.log('newHeight: ' + newHeight + ', newWidth: ' + newWidth);
-        $elemOut.hide();
+        var oldHeight = $elemOut.height();*/
+        //console.log('oldHeight: ' + oldHeight + ', oldWidth: ' + oldWidth);
+        //console.log('newHeight: ' + newHeight + ', newWidth: ' + newWidth);
         //$elemIn.css({width:oldWidth,height:oldHeight}).show();
-        $elemIn.show();
-        $elemIn.parents('.cmConstrainContainer').css({width:newWidth,height:newHeight});
+        //$elemIn.parents('.cmConstrainContainer').css({width:newWidth,height:newHeight});
+        //$elemIn.parents('.cmConstrainContainer').css({width:newWidth,height:newHeight});
+        
+        
         /*$elemIn.parents('.cmConstrainContainer').animate({
             width: newWidth,
             height: newHeight
