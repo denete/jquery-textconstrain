@@ -18,8 +18,11 @@
                 if(!data){
                     opts = $.extend({}, $.fn.cmtextconstrain.defaults, options);
                     $this.data('cmtextconstrain', opts);
-                    // clone and append
-                    // need sanity check for id, add id if none
+                    if(!($this.attr('id'))){
+                        var dateObj = new Date();
+                        var dateString = String(dateObj.getTime());
+                        $this.attr({id: dateString});
+                    }
                     cloneID = $this.attr('id') + '_clone';
                     $this.clone().insertBefore($this).attr({id: cloneID});
                     $this.hide();
@@ -28,30 +31,31 @@
                     // create constrained string
                     if(opts.restrict['type'] == 'words'){
                         var wordArr = $elemClone.text().split(/\s+/);
-                        var shortString = wordArr.length > opts.restrict['val'] ? wordArr.slice(0,opts.restrict['val']).join(' ') : $elemClone.text();
-                        
-                        
+                        if(wordArr.length <= opts.restrict['val']){
+                            $this.cmtextconstrain('destroy');
+                            return;
+                        } else {
+                            var shortString = wordArr.slice(0,opts.restrict['val']).join(' ');
+                        }
                     } else if(opts.restrict['type'] == 'chars'){
-                        var charPointer = opts.restrict['val'];
-                        var shortString = $elemClone.text().substr(0,opts.restrict['val']);
-                        var nextChar = '';
-                        while(nextChar != ' '){
-                            shortString += nextChar;
-                            nextChar = $elemClone.text().charAt(charPointer++);
+                        if($this.text().length <= opts.restrict['val']){
+                            $this.cmtextconstrain('destroy');
+                            return;
+                        } else {
+                            var charPointer = opts.restrict['val'];
+                            var shortString = $this.text().substr(0,opts.restrict['val']);
+                            var nextChar = '';
+                            while(nextChar != ' '){
+                                shortString += nextChar;
+                                nextChar = $elemClone.text().charAt(charPointer++);
+                            }
                         }
                     }
-                    
-                    if(shortString == $this.text()){
-                        $this.cmtextconstrain('destroy');
-                        return;
-                    } else {
-                        shortString += opts.trailingString;
-                    }
+                    shortString += opts.trailingString;
                     
                     $elemClone.text(shortString);
                     $elemClone.append('&nbsp;<a href="javascript:void(0);" class="cmExpose ' + opts.showControl['addclass'] + '" title="' + opts.showControl['title'] + '">' + opts.showControl['string'] + '</a>');
                     $this.append('&nbsp;<a href="javascript:void(0);" class="cmConstrain ' + opts.hideControl['addclass'] + '" title="' + opts.hideControl['title'] + '">' + opts.hideControl['string'] + '</a>');
-                    //$this.data({cloneW: $elemClone.width(),cloneH: $elemClone.height(),fullW: $this.width(),fullH: $this.height(), current: $elemClone.attr('id')});
                     
                     // need to implement delay if event is hover / mouseover
                     $elemClone.find('.cmExpose').bind(opts.event, function(){
@@ -74,7 +78,7 @@
             })
         }
     };
-    
+
     // private methods
     function _expose($elemIn,$elemOut){
         $elemOut.hide();
