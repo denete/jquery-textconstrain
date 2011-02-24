@@ -13,6 +13,7 @@
         #main{margin:1em;width:500px}
         .hidden{display:none;}
         .cmConstrainContainer{background-color:#f00}
+        .cmShowHide{text-decoration:none}
         .explanation{margin:1em;padding-bottom:1em;border-bottom:1px solid #000}
         .explanation a{color:#33f}
         .explanation ul{padding-top:.5em}
@@ -84,13 +85,21 @@ cmg.query(document).ready(function(){
         animSpeed: 250,
         delay: 100,
         event: 'click', // 'hover'
-        control: 'text', // '' equals image
         onExpose: function(){},
         onConstrain: function(){},
         fade: true,
         //restrict: {words: 0, chars: 50, height: 0, width: 0},
+        showControl: {string: '[&nbsp;+&nbsp;]', title: 'Show More', class: 'cmShowHide'},
+        hideControl: {string: '[&nbsp;-&nbsp;]', title: 'Show Less', class: 'cmShowHide'},
         trailingString: '...'
         });
+        cmg.query('#cmTextHeaderElement').cmtextconstrain({
+           restrict: {words: 0, chars: 10, height: 0, width: 0},
+           showControl: {string: '[&nbsp;+&nbsp;]', title: 'Show More', class: 'cmShowHide'},
+           hideControl: {string: '[&nbsp;-&nbsp;]', title: 'Show Less', class: 'cmShowHide'},
+           trailingString: '...'
+           });
+
 });
 </script>
 

@@ -12,76 +12,70 @@
     // public methods
     var methods = {
         init: function(options) {
-            //console.log('at init');
             return this.each(function() {
-                $this = $(this);
+                var $this = $(this);
                 data = $this.data('cmtextconstrain');
                 if(!data){
-
                     opts = $.extend({}, $.fn.cmtextconstrain.defaults, options);
                     $this.data('cmtextconstrain', opts);
-
-
-                    $this.wrap('<div class="cmConstrainContainer" style="overflow:hidden;"></div>');
-
                     // clone and append
-                    // need sanity check for id
-                    var cloneID = $this.attr('id') + '_clone';
-                    $this.clone().prependTo($this.parents('.cmConstrainContainer')).attr({id: cloneID});
+                    // need sanity check for id, add id if none
+                    cloneID = $this.attr('id') + '_clone';
+                    //$this.clone().prependTo($this.parents('.cmConstrainContainer')).attr({id: cloneID});
+                    $this.clone().insertBefore($this).attr({id: cloneID});
+                    $this.hide();
                     var $elemClone = $('#' + cloneID);
-                    
-                   // _resizeParent($elemClone);
-                     $this.parents('.cmConstrainContainer').css({
-                        marginTop: $this.css('marginTop'),
-                        marginBottom: $this.css('marginBottom'),
-                        marginLeft: $this.css('marginLeft'),
-                        marginRight: $this.css('marginRight'),
-                        paddingTop: $this.css('paddingTop'),
-                        paddingBottom: $this.css('paddingBottom'),
-                        paddingLeft: $this.css('paddingLeft'),
-                        paddingRight: $this.css('paddingRight')
-                    });
-                    $elemClone.css({padding:0,margin:0});
-                    $this.css({padding:0,margin:0});
-                    //$this.data({cloneW: $elemClone.width(),cloneH: $elemClone.height(),fullW: $this.width(),fullH: $this.height(), current: cloneID});
-                    //$this.hide();
+                    //_constrain($elemClone);
+                    if(opts.restrict["width"] > 0){
+                        // nothing
+                    } else if(opts.restrict["height"] > 0){
+                        // nothing
+                    } else if(opts.restrict["words"] > 0){
+                        //var wordArr = $this.text().split(/\b\W+\b/);
+                        var wordArr = $elemClone.text().split(' ');
+                        var countIs = $elemClone.text().match(/\S+/g).length;
+                    } else if(opts.restrict["chars"] > 0){
+                        var charPointer = opts.restrict["chars"];
+                        var tempString = $elemClone.text().substr(0,opts.restrict['chars']);
+                        var nextChar = '';
+                        while(nextChar != ' '){
+                            tempString += nextChar;
+                            nextChar = $elemClone.text().charAt(charPointer++);
+                        }
+                        //console.log('char restrict: (' + opts.restrict["chars"] + ') ' + tempString + opts.trailingString);
+                        $elemClone.text(tempString + opts.trailingString);
+                        $elemClone.append('&nbsp;<a href="javascript:void(0);" class="cmExpose ' + opts.showControl['class'] + '" title="' + opts.showControl['title'] + '">' + opts.showControl['string'] + '</a>');
+                        $this.append('&nbsp;<a href="javascript:void(0);" class="cmConstrain ' + opts.hideControl['class'] + '" title="' + opts.hideControl['title'] + '">' + opts.hideControl['string'] + '</a>');
+                        $this.data({cloneW: $elemClone.width(),cloneH: $elemClone.height(),fullW: $this.width(),fullH: $this.height(), current: $elemClone.attr('id')});
+                        $elemClone.find('.cmExpose').click(function(){
+                            console.log('expose this id: ' + $this.attr('id'));
+                            $this.data({current: $this.attr('id')});
+                            _expose($this,$elemClone);
+                        });
+                        $this.find('.cmConstrain').click(function(){
+                            console.log('constrain this id: ' + $this.attr('id'));
+                            $this.data({current: $elemClone.attr('id')});
+                            _expose($elemClone,$this);
+                        });
+                    }
                 }
-               // _constrain($this);
-                _constrain($elemClone);
             });
         },
         destroy: function(){
             return this.each(function(){
-                $this = $(this);
+                var $this = $(this);
                 data = $this.data('cmtextconstrain');
                 if(data){
-                    $('#' + $this.attr('id')).remove();
-                    $wrapParent = $this.parents('.cmConstrainContainer');
-                    $this.css({
-                        marginTop: $wrapParent.css('marginTop'),
-                        marginBottom: $wrapParent.css('marginBottom'),
-                        marginLeft: $wrapParent.css('marginLeft'),
-                        marginRight: $wrapParent.css('marginRight'),
-                        paddingTop: $wrapParent.css('paddingTop'),
-                        paddingBottom: $wrapParent.css('paddingBottom'),
-                        paddingLeft: $wrapParent.css('paddingLeft'),
-                        paddingRight: $wrapParent.css('paddingRight')
-                    }).unwrap().show().removeData('cmtextconstrain');
+                    $('#' + $this.attr('id') + '_clone').remove();
+                    $this.show().removeData('cmtextconstrain');
                 }
             })
         }
     };
     
     // private methods
-    function _resizeParent($elem){
-        //console.log('$this.outerWidth(): ' + $elem.outerWidth());
-        console.log('resizeParent');
-        //$elem.parents('.cmConstrainContainer').css({width: $elem.outerWidth(),height: $elem.outerHeight()});
-        $elem.parents('.cmConstrainContainer').css({height: $elem.outerHeight()});
-    }
-    
     function _constrain($elem){
-        if(opts.restrict["width"] > 0){
+        /*if(opts.restrict["width"] > 0){
             // nothing
         } else if(opts.restrict["height"] > 0){
             // nothing
@@ -91,7 +85,7 @@
             var countIs = $elem.text().match(/\S+/g).length;
         } else if(opts.restrict["chars"] > 0){
             var charPointer = opts.restrict["chars"];
-            var tempString = $elem.text().substr(0,opts.restrict["chars"]);
+            var tempString = $elem.text().substr(0,opts.restrict['chars']);
             var nextChar = '';
             while(nextChar != ' '){
                 tempString += nextChar;
@@ -99,57 +93,23 @@
             }
             //console.log('char restrict: (' + opts.restrict["chars"] + ') ' + tempString + opts.trailingString);
             $elem.text(tempString + opts.trailingString);
-            $elem.append('<a href="javascript:void(0);" class="cmExpose">Expose</a>');
-            $this.append('<a href="javascript:void(0);" class="cmConstrain">Constrain</a>');
+            $elem.append('&nbsp;<a href="javascript:void(0);" class="cmExpose ' + opts.showControl['class'] + '" title="' + opts.showControl['title'] + '">' + opts.showControl['string'] + '</a>');
+            $this.append('&nbsp;<a href="javascript:void(0);" class="cmConstrain ' + opts.hideControl['class'] + '" title="' + opts.hideControl['title'] + '">' + opts.hideControl['string'] + '</a>');
             $this.data({cloneW: $elem.width(),cloneH: $elem.height(),fullW: $this.width(),fullH: $this.height(), current: $elem.attr('id')});
             $elem.find('.cmExpose').click(function(){
+                console.log('expose this id: ' + $this.attr('id'));
                 _expose($this,$elem);
             });
             $this.find('.cmConstrain').click(function(){
+                console.log('constrain this id: ' + $this.attr('id'));
                 _expose($elem,$this);
             });
-            _resizeParent($elem);
-        }
+        }*/
     }
     
     function _expose($elemIn,$elemOut){
         $elemOut.hide();
         $elemIn.show();
-        
-        console.log('current: ' + $this.data('current'));
-        //console.log('fullW: ' + $this.data('fullW') + ', fullH: ' + $this.data('fullH'));
-        //console.log('cloneW: ' + $this.data('cloneW') + ', cloneH: ' + $this.data('cloneH'));
-        console.log('cmConstrainContainer height:' + $this.parents('.cmConstrainContainer').height());
-        if($this.data('current').indexOf('_clone')){
-            //$this.parents('.cmConstrainContainer').css({width:$this.data('fullW'),height:$this.data('fullH')});
-            $this.parents('.cmConstrainContainer').width($this.data('fullW')).height($this.data('fullH'));
-            $this.data({current: $elemIn.attr('id')});
-        } else {
-            //$this.parents('.cmConstrainContainer').css({width:$this.data('cloneW'),height:$this.data('cloneH')}).hide();
-            $this.parents('.cmConstrainContainer').width($this.data('cloneW')).height($this.data('cloneH'));
-            //var newWidth = $this.data('cloneW');
-            //var newHeight = $this.data('cloneH');
-            $this.data({current: $elemIn.attr('id')});
-        }
-        //console.log('data: ' + $this.data('current'));
-        //console.log('$elemOut id: ' + $elemOut.attr('id') + ', $elemIn id: ' + $elemIn.attr('id'));
-        /*var newWidth = $elemIn.width();
-        var newHeight = $elemIn.height();
-        var oldWidth = $elemOut.width();
-        var oldHeight = $elemOut.height();*/
-        //console.log('oldHeight: ' + oldHeight + ', oldWidth: ' + oldWidth);
-        //console.log('newHeight: ' + newHeight + ', newWidth: ' + newWidth);
-        //$elemIn.css({width:oldWidth,height:oldHeight}).show();
-        //$elemIn.parents('.cmConstrainContainer').css({width:newWidth,height:newHeight});
-        //$elemIn.parents('.cmConstrainContainer').css({width:newWidth,height:newHeight});
-        
-        
-        /*$elemIn.parents('.cmConstrainContainer').animate({
-            width: newWidth,
-            height: newHeight
-        }, opts.animSpeed, function() {
-            //
-        });*/
     }
 
     // passing public method calls
@@ -168,11 +128,12 @@
         animSpeed: 250,
         delay: 100,
         event: 'click', // 'hover'
-        control: 'text', // '' equals image
         onExpose: function(){},
         onConstrain: function(){},
-        fade: true,
+        fade: false,
         restrict: {width: 0, height: 0, words: 0, chars: 24},
+        showControl: {string: '[&nbsp;+&nbsp;]', title: 'Show More', class: 'cmShowHide'},
+        hideControl: {string: '[&nbsp;-&nbsp;]', title: 'Show Less', class: 'cmShowHide'},
         trailingString: '...'
     };
 
