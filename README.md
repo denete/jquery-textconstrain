@@ -1,7 +1,7 @@
 Text-constrain plugin for jQuery
 ===========================
 
-A jQuery plugin to allow text elements on a page to be constrained by size.
+A jQuery plugin to allow text elements on a page to be constrained by size (currently by words or by characters).
 
 ***
 
